@@ -1,0 +1,9 @@
+name: Testing 
+main: io.github.Nick3306.Testing.Testing
+version: .01
+commands:
+   measure:
+      description: This is a measure command.
+      usage: /measure
+      permission: 
+      permission-message: 
