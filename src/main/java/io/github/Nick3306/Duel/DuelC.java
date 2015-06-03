@@ -30,18 +30,33 @@ public class DuelC implements CommandExecutor
 			}
 			if(args[0] == "challenge")
 			{
-				if (args.length != 2)
+				if (args.length < 2)
 				{
 					sender.sendMessage("You must define a player to challenge!");
 			        return false;
 				}
+				
 				if(args.length == 2)
 				{
-					if (Bukkit.getPlayerExact(args[0]) == null)
+					if (Bukkit.getPlayerExact(args[1]) == null)
 					{
 						sender.sendMessage("Player " + args[1] + " is not online!");
 						return false;
 					}
+					for (int i = 0; i < this.plugin.duels.size(); i++)
+					{
+						if(sender ==  this.plugin.duels.get(i).getPlayer1() || sender ==  this.plugin.duels.get(i).getPlayer2())
+						{
+							sender.sendMessage("You already have a pending challenge!");
+							return false;
+						}
+						if(Bukkit.getPlayerExact(args[1]) == this.plugin.duels.get(i).getPlayer1() || Bukkit.getPlayerExact(args[1]) == this.plugin.duels.get(i).getPlayer1())
+						{
+							sender.sendMessage("Player " + args[1] + " is already beign challenged!");
+							return false;
+						}
+					}
+				 }
 					else
 					{
 						Player player1 = (Player) sender;
@@ -56,19 +71,19 @@ public class DuelC implements CommandExecutor
 					}
 				}
 			}
-			if(args[1] == "accept")
+			if(args[0] == "accept")
 			{
 				for(int i = 0; i< this.plugin.duels.size(); i++)
 				{
 					if (this.plugin.duels.get(i).getPlayer2() == sender)
 					{
-						
+						//teleport and stuff here
 					}
 				}
 				sender.sendMessage("No one has challeneged you!");
 				return false;
 			}
-			if(args[1] == "reject")
+			if(args[0] == "reject")
 			{
 				for(int i = 0; i< this.plugin.duels.size(); i++)
 				{
@@ -82,7 +97,7 @@ public class DuelC implements CommandExecutor
 				sender.sendMessage("No one has challeneged you!");
 				return false;
 			}
-		}
+		
 		return false;
 	}
 
