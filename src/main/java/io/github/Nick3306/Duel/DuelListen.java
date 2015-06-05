@@ -24,6 +24,7 @@ public class DuelListen implements Listener
 				Duel duel = this.plugin.duels.get(i);
 				duel.getPlayer1().teleport(duel.getLoc1());
 				duel.getPlayer2().teleport(duel.getLoc2());
+				this.plugin.duels.remove(i);
 			}
 		}
 	}

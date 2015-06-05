@@ -23,6 +23,7 @@ public class DuelC implements CommandExecutor
 		
 		if (cmd.getName().equalsIgnoreCase("duel")) 
 		{
+			sender.sendMessage("Duel initiated");
 			if(args.length > 2)
 			{
 				 sender.sendMessage("Too many arguments!");
@@ -30,6 +31,7 @@ public class DuelC implements CommandExecutor
 			}
 			if(args[0] == "challenge")
 			{
+				sender.sendMessage("In challenge");
 				if (args.length < 2)
 				{
 					sender.sendMessage("You must define a player to challenge!");
@@ -77,7 +79,8 @@ public class DuelC implements CommandExecutor
 				{
 					if (this.plugin.duels.get(i).getPlayer2() == sender)
 					{
-						//teleport and stuff here
+						this.plugin.duels.get(i).getPlayer1().teleport(this.plugin.duels.get(i).getLoc1());
+						this.plugin.duels.get(i).getPlayer2().teleport(this.plugin.duels.get(i).getLoc1());
 					}
 				}
 				sender.sendMessage("No one has challeneged you!");

@@ -1,5 +1,5 @@
-name: Testing 
-main: io.github.Nick3306.Duel.Duel
+name: Duel
+main: io.github.Nick3306.Duel.Main
 version: .01
 commands:
    duel:
