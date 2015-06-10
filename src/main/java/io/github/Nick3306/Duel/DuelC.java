@@ -29,7 +29,7 @@ public class DuelC implements CommandExecutor
 				 sender.sendMessage("Too many arguments!");
 		         return false;
 			}
-			if(args[0] == "challenge")
+			if(args[0].equalsIgnoreCase("challenge"))
 			{
 				sender.sendMessage("In challenge");
 				if (args.length < 2)
@@ -40,11 +40,7 @@ public class DuelC implements CommandExecutor
 				
 				if(args.length == 2)
 				{
-					if (Bukkit.getPlayerExact(args[1]) == null)
-					{
-						sender.sendMessage("Player " + args[1] + " is not online!");
-						return false;
-					}
+					
 					for (int i = 0; i < this.plugin.duels.size(); i++)
 					{
 						if(sender ==  this.plugin.duels.get(i).getPlayer1() || sender ==  this.plugin.duels.get(i).getPlayer2())
@@ -58,14 +54,25 @@ public class DuelC implements CommandExecutor
 							return false;
 						}
 					}
-				 }
-					else
+					if (Bukkit.getPlayerExact(args[1]) == null)
+					{
+						sender.sendMessage("Player " + args[1] + " is not online!");
+						return false;
+					}
+					
+					
+				 
+					else if (Bukkit.getPlayerExact(args[1]) != null)
 					{
 						Player player1 = (Player) sender;
-						Player player2 = Bukkit.getPlayerExact(args[0]);
+						Player player2 = Bukkit.getPlayerExact(args[1]);
+						sender.sendMessage("defined players");
 						Location loc1 = player1.getLocation();
+						sender.sendMessage("player one location set");
 						Location loc2 = player2.getLocation();
+						sender.sendMessage("set locations");
 						Duel d = new Duel(player1, player2, loc1, loc2);
+						sender.sendMessage("created class");
 						this.plugin.duels.add(d);
 						sender.sendMessage("Asking player " + args[1] + " to duel");
 						player2.sendMessage("Player " + player1.getName() + " has asked you to duel. /duel accept to accept it /duel reject to reject");
@@ -73,7 +80,8 @@ public class DuelC implements CommandExecutor
 					}
 				}
 			}
-			if(args[0] == "accept")
+			
+			if(args[0].equalsIgnoreCase("accept"))
 			{
 				for(int i = 0; i< this.plugin.duels.size(); i++)
 				{
@@ -81,12 +89,13 @@ public class DuelC implements CommandExecutor
 					{
 						this.plugin.duels.get(i).getPlayer1().teleport(this.plugin.duels.get(i).getLoc1());
 						this.plugin.duels.get(i).getPlayer2().teleport(this.plugin.duels.get(i).getLoc1());
+						return true;
 					}
 				}
 				sender.sendMessage("No one has challeneged you!");
 				return false;
 			}
-			if(args[0] == "reject")
+			if(args[0].equalsIgnoreCase("reject"))
 			{
 				for(int i = 0; i< this.plugin.duels.size(); i++)
 				{
@@ -100,8 +109,9 @@ public class DuelC implements CommandExecutor
 				sender.sendMessage("No one has challeneged you!");
 				return false;
 			}
-		
+		}
 		return false;
 	}
-
 }
+		
+		

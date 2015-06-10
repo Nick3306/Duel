@@ -11,12 +11,12 @@ public class Main extends JavaPlugin
 	ArrayList<Arena> arenas = new ArrayList<Arena>();
 	public void onEnable()
 	{
-		
-	}
-	public void onDisable()
-	{
 		PluginManager pm = getServer().getPluginManager();
 		getCommand("duel").setExecutor(new DuelC(this));
 		pm.registerEvents(new DuelListen(this), this);
+	}
+	public void onDisable()
+	{
+		duels.clear();
 	}
 }
