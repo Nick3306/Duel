@@ -2,10 +2,14 @@ package io.github.Nick3306.Duel;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+
+import java.text.NumberFormat;
+import java.text.ParsePosition;
 import java.util.*;
 
 public class DuelC implements CommandExecutor
@@ -87,8 +91,11 @@ public class DuelC implements CommandExecutor
 				{
 					if (this.plugin.duels.get(i).getPlayer2() == sender)
 					{
-						this.plugin.duels.get(i).getPlayer1().teleport(this.plugin.duels.get(i).getLoc1());
-						this.plugin.duels.get(i).getPlayer2().teleport(this.plugin.duels.get(i).getLoc1());
+						World world = Bukkit.getWorld("duel");
+						Location loc1 = new Location(world, this.plugin.duels.get(i).getArena().getX(), this.plugin.duels.get(i).getArena().getY(), this.plugin.duels.get(i).getArena().getZ());
+						this.plugin.duels.get(i).getPlayer1().teleport(loc1);
+						Location loc2 = new Location(world, this.plugin.duels.get(i).getArena().getX2(), this.plugin.duels.get(i).getArena().getY2(), this.plugin.duels.get(i).getArena().getZ2());
+						this.plugin.duels.get(i).getPlayer2().teleport(loc2);
 						return true;
 					}
 				}
@@ -109,9 +116,79 @@ public class DuelC implements CommandExecutor
 				sender.sendMessage("No one has challeneged you!");
 				return false;
 			}
+			
+			if(args[0].equalsIgnoreCase("createarena"))
+			{
+				Player creator = Bukkit.getPlayerExact(sender.getName());
+				if(args.length < 2)
+				{
+					sender.sendMessage("Not enough arguments!");
+				}
+				if(args.length > 2)
+				{
+					sender.sendMessage("Too many arguments!");
+				}
+				if(args.length == 2)
+				{
+					 plugin.getConfig().set("arenas.args[1]", "");
+					 plugin.getConfig().set("arenas.args[1].world", creator.getWorld().getName());
+				}			
+			}
+			if(args[0].equalsIgnoreCase("setspawn"))
+			{
+				if(args.length > 6)
+				{
+					sender.sendMessage("Too many arguments!");
+				}
+				if(args.length < 6)
+				{
+					sender.sendMessage("Not enough arguments!");
+				}
+				if(args.length == 6)
+				{
+					if(plugin.getConfig().contains("arenas.args[1]"))
+					{
+					   if(args[2].equalsIgnoreCase("player1"))
+						{
+							Player creator = Bukkit.getPlayerExact(sender.getName());
+							Location loc = creator.getLocation();
+							plugin.getConfig().set("arenas.args[1].x", loc.getX());
+							plugin.getConfig().set("arenas.args[1].y", loc.getY());
+							plugin.getConfig().set("arenas.args[1].z", loc.getZ());		
+							return true;
+						}
+						if(args[2].equalsIgnoreCase("player2"))
+						{
+							Player creator = Bukkit.getPlayerExact(sender.getName());
+							Location loc = creator.getLocation();
+							plugin.getConfig().set("arenas.args[1].x2", loc.getX());
+							plugin.getConfig().set("arenas.args[1].y2", loc.getY());
+							plugin.getConfig().set("arenas.args[1].z2", loc.getZ());		
+							return true;
+						}
+					}
+					else
+					{
+						sender.sendMessage("That arena does not exist!");
+						return false;
+					}
+					
+				}
+				else
+				{
+					sender.sendMessage("Incorrect usage /duel setspawn arena player1/2");
+					return false;
+				}
+				
+			}
 		}
 		return false;
 	}
+	public static boolean isNumeric(String str)
+	{
+	  NumberFormat formatter = NumberFormat.getInstance();
+	  ParsePosition pos = new ParsePosition(0);
+	  formatter.parse(str, pos);
+	  return str.length() == pos.getIndex();
+	}
 }
-		
-		

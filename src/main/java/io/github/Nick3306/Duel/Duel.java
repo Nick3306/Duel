@@ -18,7 +18,7 @@ public class Duel
 	Player player2;
 	Location loc1;
 	Location loc2;
-	//Arena arena;
+	Arena arena;
 	Duel(Player player1, Player player2, Location loc1, Location loc2)
 	{
 		this.player1 = player1;
@@ -26,19 +26,23 @@ public class Duel
 		this.loc1 = loc1;
 		this.loc2 = loc2;
 	}
-	/*void setArena()			//Sets a random arena, wont work until we get the arenas into a list
+	void setArena()			//Sets a random arena, wont work until we get the arenas into a list
 	{
 		int num = this.plugin.arenas.size();
 		Random rand = new Random();
 		int index = rand.nextInt(num);
 		arena = this.plugin.arenas.get(index);
 	}
+	Arena getArena()
+	{
+		return arena;
+	}
 	
 	String getArenaName()
 	{
 		return arena.getName();
 	}
-	*/
+	
 	Player getPlayer1()
 	{
 		return player1;
