@@ -27,10 +27,8 @@ public class DuelC implements CommandExecutor
 		
 		if (cmd.getName().equalsIgnoreCase("duel")) 
 		{
-			sender.sendMessage("Duel initiated");
 			if(args[0].equalsIgnoreCase("challenge"))
 			{
-				sender.sendMessage("In challenge");
 				if(args.length > 2)
 				{
 					 sender.sendMessage("Too many arguments!");
@@ -188,6 +186,16 @@ public class DuelC implements CommandExecutor
 					return false;
 				}
 				
+			}
+			if (args[0].equalsIgnoreCase("arenas"))
+			{
+				sender.sendMessage("List of Arenas");
+				sender.sendMessage("_________________________");
+				for (int i = 0; i < this.plugin.arenas.size(); i++)
+				{
+					sender.sendMessage(this.plugin.arenas.get(i).getName());
+				}
+				return true;
 			}
 		}
 		sender.sendMessage("incorrect useage!");
