@@ -74,7 +74,7 @@ public class DuelC implements CommandExecutor
 						//sender.sendMessage("player one location set");
 						Location loc2 = player2.getLocation();
 						//sender.sendMessage("set locations");
-						Arena a = this.plugin.arenas.get(0);
+						Arena a = setArena();
 						Duel d = new Duel(player1, player2, loc1, loc2, a);
 						//sender.sendMessage("created class");
 						this.plugin.duels.add(d);
@@ -234,6 +234,13 @@ public class DuelC implements CommandExecutor
 		}
 		sender.sendMessage("incorrect useage!");
 		return false;
+	}
+	Arena setArena()			//Sets a random arena, wont work until we get the arenas into a list
+	{
+		int num = this.plugin.arenas.size();
+		Random rand = new Random();
+		int index = rand.nextInt(num);
+		return this.plugin.arenas.get(index);
 	}
 	public static boolean isNumeric(String str)
 	{

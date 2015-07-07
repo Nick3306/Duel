@@ -26,17 +26,6 @@ public class Duel
 		this.loc1 = loc1;
 		this.loc2 = loc2;
 		arena = a;
-		
-		//player1.sendMessage("Set all but arena" + " size is: " + this.plugin.arenas.size());
-		//arena = this.plugin.arenas.get(1);
-	}
-	void setArena()			//Sets a random arena, wont work until we get the arenas into a list
-	{
-		/*int num = this.plugin.arenas.size();
-		Random rand = new Random();
-		int index = rand.nextInt(num);
-		*/
-		arena = this.plugin.arenas.get(0);
 	}
 	Arena getArena()
 	{
