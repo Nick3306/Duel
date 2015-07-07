@@ -46,14 +46,14 @@ public class DuelListen implements Listener
 			if (this.plugin.duels.get(i).getPlayer1() == loser || this.plugin.duels.get(i).getPlayer2() == loser)
 			{	
 				loser.sendMessage("You lose!");
-				Duel duel = this.plugin.duels.get(i);
-				if(loser == duel.getPlayer1())
+				
+				if(this.plugin.duels.get(i).getPlayer1() == loser)
 				{
-					duel.getPlayer1().teleport(duel.getLoc1());
+					event.setRespawnLocation((this.plugin.duels.get(i).getLoc1()));
 				}
-				if(loser == duel.getPlayer2())
+				if(this.plugin.duels.get(i).getPlayer2() == loser)
 				{
-					duel.getPlayer2().teleport(duel.getLoc2());
+					event.setRespawnLocation((this.plugin.duels.get(i).getLoc2()));
 				}
 				this.plugin.duels.remove(i);
 			}

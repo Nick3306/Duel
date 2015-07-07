@@ -1,6 +1,7 @@
 package io.github.Nick3306.Duel;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.command.Command;
@@ -68,13 +69,14 @@ public class DuelC implements CommandExecutor
 					{
 						Player player1 = (Player) sender;
 						Player player2 = Bukkit.getPlayerExact(args[1]);
-						sender.sendMessage("defined players");
+						//sender.sendMessage("defined players");
 						Location loc1 = player1.getLocation();
-						sender.sendMessage("player one location set");
+						//sender.sendMessage("player one location set");
 						Location loc2 = player2.getLocation();
-						sender.sendMessage("set locations");
-						Duel d = new Duel(player1, player2, loc1, loc2);
-						sender.sendMessage("created class");
+						//sender.sendMessage("set locations");
+						Arena a = this.plugin.arenas.get(0);
+						Duel d = new Duel(player1, player2, loc1, loc2, a);
+						//sender.sendMessage("created class");
 						this.plugin.duels.add(d);
 						sender.sendMessage("Asking player " + args[1] + " to duel");
 						player2.sendMessage("Player " + player1.getName() + " has asked you to duel. /duel accept to accept it /duel reject to reject");
@@ -89,7 +91,7 @@ public class DuelC implements CommandExecutor
 				{
 					if (this.plugin.duels.get(i).getPlayer2() == sender)
 					{
-						World world = Bukkit.getWorld("duel");
+						World world = this.plugin.duels.get(i).getArena().getWorld();
 						Location loc1 = new Location(world, this.plugin.duels.get(i).getArena().getX(), this.plugin.duels.get(i).getArena().getY(), this.plugin.duels.get(i).getArena().getZ());
 						this.plugin.duels.get(i).getPlayer1().teleport(loc1);
 						Location loc2 = new Location(world, this.plugin.duels.get(i).getArena().getX2(), this.plugin.duels.get(i).getArena().getY2(), this.plugin.duels.get(i).getArena().getZ2());
@@ -160,6 +162,7 @@ public class DuelC implements CommandExecutor
 							plugin.getConfig().set("arenas." + args[1] + ".y", loc.getY());
 							plugin.getConfig().set("arenas." + args[1] + ".z", loc.getZ());		
 							plugin.saveConfig();
+							sender.sendMessage("Player 1 spawn set for " + args[1]);
 							return true;
 						}
 						if(args[2].equalsIgnoreCase("player2"))
@@ -170,6 +173,7 @@ public class DuelC implements CommandExecutor
 							plugin.getConfig().set("arenas." + args[1] + ".y2", loc.getY());
 							plugin.getConfig().set("arenas." + args[1] + ".z2", loc.getZ());		
 							plugin.saveConfig();
+							sender.sendMessage("Player 2 spawn set for " + args[1]);
 							return true;
 						}
 					}
@@ -187,13 +191,43 @@ public class DuelC implements CommandExecutor
 				}
 				
 			}
+			if (args[0].equalsIgnoreCase("removearena"))
+			{
+				if(args.length == 2)
+				{
+					if(plugin.getConfig().contains("arenas." +args[1]))
+					{
+						for(int i = 0; i < this.plugin.arenas.size(); i++)
+						{
+							if(plugin.arenas.get(i).getName().equals(args[1]))
+							{
+								plugin.arenas.remove(i);
+							}
+						}
+						plugin.getConfig().getConfigurationSection("arenas").set(args[1], null);
+						plugin.saveConfig();
+						sender.sendMessage("Arena removed!");
+						return true;
+					}
+					else
+					{
+						sender.sendMessage("That arena does not exist!");
+						return false;
+					}
+				}
+				else
+				{
+					sender.sendMessage("Wrong number of arguments!");
+					return false;
+				}
+			}
 			if (args[0].equalsIgnoreCase("arenas"))
 			{
-				sender.sendMessage("List of Arenas");
-				sender.sendMessage("_________________________");
+				
+				sender.sendMessage(ChatColor.GREEN + "|________Arenas________|");
 				for (int i = 0; i < this.plugin.arenas.size(); i++)
 				{
-					sender.sendMessage(this.plugin.arenas.get(i).getName());
+					sender.sendMessage(ChatColor.YELLOW + this.plugin.arenas.get(i).getName());
 				}
 				return true;
 			}
