@@ -28,62 +28,64 @@ public class DuelC implements CommandExecutor
 		
 		if (cmd.getName().equalsIgnoreCase("duel")) 
 		{
-			if(args[0].equalsIgnoreCase("challenge"))
+			if(sender.hasPermission("duel.user") || sender.hasPermission("duel.admin"))
 			{
-				if(args.length > 2)
+				if(args[0].equalsIgnoreCase("challenge"))
 				{
-					 sender.sendMessage("Too many arguments!");
-			         return false;
-				}
-				if (args.length < 2)
-				{
-					sender.sendMessage("You must define a player to challenge!");
-			        return false;
-				}
-				
-				if(args.length == 2)
-				{
-					
-					for (int i = 0; i < this.plugin.duels.size(); i++)
+					if(args.length > 2)
 					{
-						if(sender ==  this.plugin.duels.get(i).getPlayer1() || sender ==  this.plugin.duels.get(i).getPlayer2())
-						{
-							sender.sendMessage("You already have a pending challenge!");
-							return false;
-						}
-						if(Bukkit.getPlayerExact(args[1]) == this.plugin.duels.get(i).getPlayer1() || Bukkit.getPlayerExact(args[1]) == this.plugin.duels.get(i).getPlayer1())
-						{
-							sender.sendMessage("Player " + args[1] + " is already beign challenged!");
-							return false;
-						}
-					}
-					if (Bukkit.getPlayerExact(args[1]) == null)
-					{
-						sender.sendMessage("Player " + args[1] + " is not online!");
+						sender.sendMessage("Too many arguments!");
 						return false;
 					}
+					if (args.length < 2)
+					{
+						sender.sendMessage("You must define a player to challenge!");
+						return false;
+					}
+				
+					if(args.length == 2)
+					{
+					
+						for (int i = 0; i < this.plugin.duels.size(); i++)
+						{
+							if(sender ==  this.plugin.duels.get(i).getPlayer1() || sender ==  this.plugin.duels.get(i).getPlayer2())
+							{
+								sender.sendMessage("You already have a pending challenge!");
+								return false;
+							}
+							if(Bukkit.getPlayerExact(args[1]) == this.plugin.duels.get(i).getPlayer1() || Bukkit.getPlayerExact(args[1]) == this.plugin.duels.get(i).getPlayer1())
+							{
+								sender.sendMessage("Player " + args[1] + " is already beign challenged!");
+								return false;
+							}
+						}
+						if (Bukkit.getPlayerExact(args[1]) == null)
+						{
+							sender.sendMessage("Player " + args[1] + " is not online!");
+							return false;
+						}
 					
 					
 				 
-					else if (Bukkit.getPlayerExact(args[1]) != null)
-					{
-						Player player1 = (Player) sender;
-						Player player2 = Bukkit.getPlayerExact(args[1]);
-						//sender.sendMessage("defined players");
-						Location loc1 = player1.getLocation();
-						//sender.sendMessage("player one location set");
-						Location loc2 = player2.getLocation();
-						//sender.sendMessage("set locations");
-						Arena a = setArena();
-						Duel d = new Duel(player1, player2, loc1, loc2, a);
-						//sender.sendMessage("created class");
-						this.plugin.duels.add(d);
-						sender.sendMessage("Asking player " + args[1] + " to duel");
-						player2.sendMessage("Player " + player1.getName() + " has asked you to duel. /duel accept to accept it /duel reject to reject");
-						return true;
+						else if (Bukkit.getPlayerExact(args[1]) != null)
+						{
+							Player player1 = (Player) sender;
+							Player player2 = Bukkit.getPlayerExact(args[1]);
+							//sender.sendMessage("defined players");
+							Location loc1 = player1.getLocation();
+							//sender.sendMessage("player one location set");
+							Location loc2 = player2.getLocation();
+							//sender.sendMessage("set locations");
+							Arena a = setArena();
+							Duel d = new Duel(player1, player2, loc1, loc2, a);
+							//sender.sendMessage("created class");
+							this.plugin.duels.add(d);
+							sender.sendMessage("Asking player " + args[1] + " to duel");
+							player2.sendMessage("Player " + player1.getName() + " has asked you to duel. /duel accept to accept it /duel reject to reject");
+							return true;
+						}
 					}
 				}
-			}
 			
 			if(args[0].equalsIgnoreCase("accept"))
 			{
@@ -119,107 +121,133 @@ public class DuelC implements CommandExecutor
 			
 			if(args[0].equalsIgnoreCase("createarena"))
 			{
-				Player creator = Bukkit.getPlayerExact(sender.getName());
-				if(args.length < 2)
+				
+				if(sender.hasPermission("duel.admin"))
 				{
-					sender.sendMessage("Not enough arguments!");
-					return false;
-				}
-				if(args.length > 2)
-				{
-					sender.sendMessage("Too many arguments!");
-					return false;
-				}
-				if(args.length == 2)
-				{
-					
-					 plugin.getConfig().set("arenas." + args[1], "");
-					 plugin.getConfig().set("arenas." + args[1]+ ".world", creator.getWorld().getName());
-					 sender.sendMessage("Arena created");
-					 plugin.saveConfig();
-					 return true;
-				}			
-			}
-			if(args[0].equalsIgnoreCase("setspawn"))
-			{
-				if(args.length > 3)
-				{
-					sender.sendMessage("Too many arguments!");
-				}
-				if(args.length < 3)
-				{
-					sender.sendMessage("Not enough arguments!");
-				}
-				if(args.length == 3)
-				{
-					if(plugin.getConfig().contains("arenas." +args[1]))
+					Player creator = Bukkit.getPlayerExact(sender.getName());
+					if(args.length < 2)
 					{
-					   if(args[2].equalsIgnoreCase("player1"))
+						sender.sendMessage("Not enough arguments!");
+						return false;
+					}
+					if(args.length > 2)
+					{
+						sender.sendMessage("Too many arguments!");
+						return false;
+					}
+					if(args.length == 2)
+					{
+					
+						plugin.getConfig().set("arenas." + args[1], "");
+						plugin.getConfig().set("arenas." + args[1]+ ".world", creator.getWorld().getName());
+						sender.sendMessage("Arena created");
+						plugin.saveConfig();
+						return true;
+					}
+				}
+				else 
+				{
+					sender.sendMessage("You do not have access to that command!");
+					return false;
+				}
+			}
+			if(args[0].equalsIgnoreCase("setspawn"))		
+			{
+				if(sender.hasPermission("duel.admin"))
+				{
+					if(args.length > 3)
+					{
+						sender.sendMessage("Too many arguments!");
+					}
+					if(args.length < 3)
+					{
+						sender.sendMessage("Not enough arguments!");
+					}
+					if(args.length == 3)
+					{
+						if(plugin.getConfig().contains("arenas." +args[1]))
 						{
-							Player creator = Bukkit.getPlayerExact(sender.getName());
-							Location loc = creator.getLocation();
-							plugin.getConfig().set("arenas." + args[1] + ".x", loc.getX());
-							plugin.getConfig().set("arenas." + args[1] + ".y", loc.getY());
-							plugin.getConfig().set("arenas." + args[1] + ".z", loc.getZ());		
-							plugin.saveConfig();
-							sender.sendMessage("Player 1 spawn set for " + args[1]);
-							return true;
+							if(args[2].equalsIgnoreCase("player1"))
+							{
+								Player creator = Bukkit.getPlayerExact(sender.getName());
+								Location loc = creator.getLocation();
+								plugin.getConfig().set("arenas." + args[1] + ".x", loc.getX());
+								plugin.getConfig().set("arenas." + args[1] + ".y", loc.getY());
+								plugin.getConfig().set("arenas." + args[1] + ".z", loc.getZ());		
+								plugin.saveConfig();
+								sender.sendMessage("Player 1 spawn set for " + args[1]);
+								return true;
+							}
+							if(args[2].equalsIgnoreCase("player2"))
+							{
+								Player creator = Bukkit.getPlayerExact(sender.getName());
+								Location loc = creator.getLocation();
+								plugin.getConfig().set("arenas." + args[1] + ".x2", loc.getX());
+								plugin.getConfig().set("arenas." + args[1] + ".y2", loc.getY());
+								plugin.getConfig().set("arenas." + args[1] + ".z2", loc.getZ());		
+								plugin.saveConfig();
+								sender.sendMessage("Player 2 spawn set for " + args[1]);
+								return true;
+							}
 						}
-						if(args[2].equalsIgnoreCase("player2"))
+						else
 						{
-							Player creator = Bukkit.getPlayerExact(sender.getName());
-							Location loc = creator.getLocation();
-							plugin.getConfig().set("arenas." + args[1] + ".x2", loc.getX());
-							plugin.getConfig().set("arenas." + args[1] + ".y2", loc.getY());
-							plugin.getConfig().set("arenas." + args[1] + ".z2", loc.getZ());		
-							plugin.saveConfig();
-							sender.sendMessage("Player 2 spawn set for " + args[1]);
-							return true;
+							sender.sendMessage("That arena does not exist!");
+							return false;
 						}
+					
 					}
 					else
 					{
-						sender.sendMessage("That arena does not exist!");
+						sender.sendMessage("Incorrect usage /duel setspawn arena player1/2");
 						return false;
 					}
-					
 				}
 				else
 				{
-					sender.sendMessage("Incorrect usage /duel setspawn arena player1/2");
+					sender.sendMessage("You do not have access to that command!");
 					return false;
 				}
 				
 			}
 			if (args[0].equalsIgnoreCase("removearena"))
 			{
-				if(args.length == 2)
+				if(sender.hasPermission("duel.user"))
 				{
-					if(plugin.getConfig().contains("arenas." +args[1]))
+					if(args.length == 2)
 					{
-						for(int i = 0; i < this.plugin.arenas.size(); i++)
+						if(plugin.getConfig().contains("arenas." +args[1]))
 						{
-							if(plugin.arenas.get(i).getName().equals(args[1]))
+							for(int i = 0; i < this.plugin.arenas.size(); i++)
 							{
-								plugin.arenas.remove(i);
+								if(plugin.arenas.get(i).getName().equals(args[1]))
+								{
+									plugin.arenas.remove(i);
+								}
 							}
+							plugin.getConfig().getConfigurationSection("arenas").set(args[1], null);
+							plugin.saveConfig();
+							sender.sendMessage("Arena removed!");
+							return true;
 						}
-						plugin.getConfig().getConfigurationSection("arenas").set(args[1], null);
-						plugin.saveConfig();
-						sender.sendMessage("Arena removed!");
-						return true;
+						else
+						{
+							sender.sendMessage("That arena does not exist!");
+							return false;
+						}
 					}
 					else
 					{
-						sender.sendMessage("That arena does not exist!");
+						sender.sendMessage("Wrong number of arguments!");
 						return false;
+					
 					}
 				}
 				else
 				{
-					sender.sendMessage("Wrong number of arguments!");
+					sender.sendMessage("You do not have access to that command!");
 					return false;
-				}
+					}
 			}
 			if (args[0].equalsIgnoreCase("arenas"))
 			{
@@ -232,8 +260,15 @@ public class DuelC implements CommandExecutor
 				return true;
 			}
 		}
+	}
+		else
+		{
+			sender.sendMessage("You do not have access to that command!");	
+			return false;
+		}
 		sender.sendMessage("incorrect useage!");
 		return false;
+		
 	}
 	Arena setArena()			//Sets a random arena, wont work until we get the arenas into a list
 	{

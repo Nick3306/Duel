@@ -5,5 +5,5 @@ commands:
    duel:
       description: A dueling command
       usage: /duel
-      permission: 
-      permission-message: 
+      permission: duel.user
+      permission-message: You do not have permission to use this command!
